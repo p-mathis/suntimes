@@ -1,4 +1,4 @@
-# suntimes
+# SunTimes : longitude, latitude and altitude
 Get sunrise and sunset time for a location (longitude, latitude, altitude) with python
 ## Project description
 This module contains functions to determine the time of sunset and the time of sunrise for a given day in a given location (longitude, latitude and altitude).  
