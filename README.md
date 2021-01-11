@@ -1,2 +1,2 @@
 # suntimes
-Get sunrise and sunset with python
+Get sunrise and sunset time with python
