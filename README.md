@@ -16,14 +16,19 @@ $ pip install tzlocal
 ```sh
 $ pip install jdcal
 ```
-<!-- ### Installation
+### Installation
 The module can be installed using pip
 ```sh
 $ pip install suntimes
-``` -->
+```
 ## Usage
 ### Class SunTimes
-place = SunTimes(longitude, latitude, altitude=0)  
+```python
+place = SunTimes(longitude, latitude, altitude=0)
+ ```
+python
+place = SunTimes(longitude, latitude, altitude=0)
+
 A place is characterized by longitude, latitude, altitude
 - longitude: float between -180 and 180; negative for west longitudes, positive for east longitudes
 - latitude: float between -66.56 and +66.56; the calculation is only valid between the two polar circles. Positive if north, negative if south
