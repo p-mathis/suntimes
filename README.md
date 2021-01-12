@@ -2,7 +2,7 @@
 Get sunrise and sunset time for a location (longitude, latitude, altitude) with python
 ## Project description
 This module contains functions to determine the time of sunset and the time of sunrise for a given day in a given location (longitude, latitude and altitude).  
-Times are calculated using data from https://en.wikipedia.org/wiki/Sunrise_equation  
+Times are calculated using data from [Wikipedia](https://en.wikipedia.org/wiki/Sunrise_equation).  
 The main functions return the times of sunset and sunrise in UTC or in local time. Additional functions return separately the hour, minute and second of sunrise and sunset. A function returns the length of the day. It is possible to obtain the timetables for a place in a different timezone, just by specifying this one.
 ## Installation
 ### Required modules
@@ -27,8 +27,6 @@ $ pip install suntimes
 place = SunTimes(longitude, latitude, altitude=0)
  ```
 python
-place = SunTimes(longitude, latitude, altitude=0)
-
 A place is characterized by longitude, latitude, altitude
 - longitude: float between -180 and 180; negative for west longitudes, positive for east longitudes
 - latitude: float between -66.56 and +66.56; the calculation is only valid between the two polar circles. Positive if north, negative if south
@@ -37,7 +35,7 @@ A place is characterized by longitude, latitude, altitude
 Most of mehtods take a date as an argument.  
 The date will be a datetime.datetime in the format (yyyy, mm, dd), the time not important. Eg : datetime(2020, 12, 22).  
 Methods risewhere and setwhere take timezone as a second argument.  
-The timezone list is available on : https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568
+The timezone list is available on [github](https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568).
 ### Examples
 #### Main methods
 Import modules. Create an instance.
