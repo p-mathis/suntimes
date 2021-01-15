@@ -1,9 +1,10 @@
 # SunTimes : longitude, latitude and altitude
-Get sunrise and sunset time for a location (longitude, latitude, altitude) with python
+Sunrise and sunset time calculation for a location (longitude, latitude, altitude) with python. Also available sunrise and sunset timetable for a whole year as a json or a csv file.
 ## Project description
 This module contains functions to determine the time of sunset and the time of sunrise for a given day in a given location (longitude, latitude and altitude).  
 Times are calculated using data from [Wikipedia](https://en.wikipedia.org/wiki/Sunrise_equation).  
 The main functions return the times of sunset and sunrise in UTC or in local time. Additional functions return separately the hour, minute and second of sunrise and sunset. A function returns the length of the day. It is possible to obtain the timetables for a place in a different timezone, just by specifying this one.
+The SunFiles class allows you to create and save a json or csv file with the timetables for a whole year.
 ## Installation
 ### Required modules
 suntimes module requires pytz, tzlocal, jdcal  
@@ -122,3 +123,39 @@ sun_8848.durationverbose(day)
 '10h 58mn 54s'  
 ```
 A difference of more than half an hour for the calculation of the length of the day.
+### Class SunFiles
+file = SunFiles(place, year, place_verbose="), where place is a SunTimes instance, year the year you choose and place_verbose the verbose name of the place.  
+## Instanciation
+```python
+from suntimes import SunTimes, SunFiles
+
+place = SunTimes(2.349902, 48.852968, 35)
+file = SunFiles(place, 2020, "Notre-Dame de Paris")
+```
+## Methods
+### Get the data
+```python
+place = SunTimes(2.349902, 48.852968, 35)
+file = SunFiles(place, 2020, "Notre-Dame de Paris")
+# Get json data : get_json(self, elsewhere = None)
+file.get_json()
+# Get csv data : get_csv(self, elsewhere = None)
+file.get_csv(elsewhere = "America/Sao_Paulo")
+```
+Return data with:
+- month
+- day
+- hour, minute and second of sunrise and sunset in utc, local computer time and specific timezone. If elswhere not specified, return utc, local computer time, local computer time again.
+- schedules in a verbose mode (i.e. 8 h 12 mn 7 s)
+### Create and register the file
+The data is calculated and the file created and registered.
+```python
+register_json(self, path=None, file_name=None, elswhere=None)
+register_csv(self, path=None, file_name=None, elswhere=None)
+```
+The path must be indicated correctly, otherwise an error is raised : "/home/toto/Desktop/" or "C:\Mes Documents\Perso\Exercices\ for exemple.
+If file_name is not specified, it is generated automatically. For example : "2020_Notre-Dame_de_Paris_sun_timetable.json"
+```python
+file.register_json(path="/home/toto/Desktop/", file_name="2020.json")
+file.register_csv(path="/home/toto/Desktop/", elsewhere="America/Sao_Paulo")
+```

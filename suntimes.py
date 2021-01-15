@@ -358,6 +358,8 @@ class SunFiles():
         #Copy and register json table as a file
         if path is None:
             raise ValueError("Entrez un chemin pour le fichier / Give the path for the file")
+        if not (path.endswith("/") or path.endswith("\\")):
+            raise ValueError("Vérifiez le chemin : doit inclure / ou \ en fin de nom - Check the path: must include / or \ at the end of the name")            
         self.place_verbose = self.place_verbose.replace(" ", "_")
         self.place_verbose = self.place_verbose.replace("'", "-")
         if file_name is None:
@@ -399,6 +401,8 @@ class SunFiles():
         #Copy and register json table as a file
         if path is None:
             raise ValueError("Entrez un chemin pour le fichier / Give the path for the file")
+        if not (path.endswith("/") or path.endswith("\\")):
+            raise ValueError("Vérifiez le chemin : doit inclure / ou \ en fin de nom - Check the path: must include / or \ at the end of the name")       
         self.place_verbose = self.place_verbose.replace(" ", "_")
         self.place_verbose = self.place_verbose.replace("'", "-")
         if file_name is None:
