@@ -17,6 +17,14 @@ def fraction_day_to_hms(f):
 
     return (int(h), int(m), int(s), int(s%1*1000))
 
+def is_leap_year(y):
+    # Renvoie True si l'année y est bissextile, False si non bissextile.
+    # Return True if year y is leap, False if not.
+    if (y % 4 != 0) or((y % 100 == 0) and (y % 400 != 0)):
+        return False
+    else: 
+        return True    
+
 class SunTimes():
     """Un lieu est caractérisé par longitude, latitude, altitude
     -longitude : float compris entre -180 et 180 ; négatif pour les longitudes ouest, positif pour les longitudes est
@@ -141,7 +149,6 @@ class SunTimes():
 
     def sset(self, date):
         return self.setlocal(date).second
-
     
     # Renvoie la durée du jour (deltatime ou tuple : h, m, s, millisec, ou verbeux)
     # Returns the duration of the day (deltatime or tuple: h, m, s, millisec, or verbose)
@@ -177,3 +184,229 @@ class SunTimes():
             return else_time   
         except:
             raise ValueError('Vérifiez la timezone / Check the timezone')
+
+class SunFiles():
+    def __init__(self, place, year, place_verbose=""):
+        # place est une instance de SunTimes() ; place_verbose est le nom verbeux du lieu (par ex : "Paris Notre-Dame").
+        # place in an instance of SunTimes() ; place_verbose is the verbose_name of the place (i.e. "Paris Notre-Dame")
+        if not isinstance(year, int):
+            raise ValueError("l'année doit être un entier / year must be an integer")
+        self.place = place        
+        self.year = year
+        self.place_verbose = place_verbose
+    
+    def get_days(self):
+        # Renvoie le nombre de jours pour chaque mois de l'année year sous forme de liste : [31, 28, 31, 30...]
+        # Return nombre of days for each month of the year year as a list : [31, 28, 31, 30...]
+        if is_leap_year(self.year):
+            return [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        else:
+            return [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    
+    def get_list_days(self):
+        # Renvoie tous les jours de l'année sous forme de liste de tuples du type (yyyy, mm, dd), c'est à dire [(2020,1,1), (2020,1,2)...(2020,12,31)]
+        # Return all the days of the year as a liste of tuples format (yyyy, mm, dd), i.e. [(2020,1,1), (2020,1,2)...(2020,12,31)]
+        days = self.get_days()
+        list_days = []
+        for m in range(12):
+            for d in range(days[m]):
+                day = (self.year, m+1, d+1)
+                list_days.append(day)
+        return list_days
+    
+    # Ces fonctions renvoient une liste de datetime(yyyy, mm, dd, h, mn, s, ms) pour les levers et couchers de toute l'année, heure utc, heure de l'ordinateur local
+    # These methods return a list of datetime(yyyy, mm, dd, h, mn, s, ms) for sunrise and sunset of all the year, utc time and local computer time.
+    def rise_datetime_utc(self):
+        days = self.get_list_days()
+        table = []
+        for d in days:
+            date_d = datetime(*d)
+            time = self.place.riseutc(date_d)
+            table.append(time)
+        return table
+            
+    def set_datetime_utc(self):
+        days = self.get_list_days()
+        table = []
+        for d in days:
+            date_d = datetime(*d)
+            time = self.place.setutc(date_d)
+            table.append(time)
+        return table 
+    
+    def rise_datetime_local(self):
+        days = self.rise_datetime_utc()
+        table = []
+        for d in days:
+            time = d.replace(tzinfo=pytz.utc).astimezone(local_tz)
+            table.append(time)
+        return table
+    
+    def set_datetime_local(self):
+        days = self.rise_datetime_utc()
+        table = []
+        for d in days:
+            time = d.replace(tzinfo=pytz.utc).astimezone(local_tz)
+            table.append(time)
+        return table
+    
+    def month_days(self, month):
+        #renvoie les jours d'un mois au format datetime(an, mois, jour) ; le mois est un entier entre 1 et 12
+        #return the days of the month in format datetime(year, month, day) ; month integer from 1 to 12
+        if not isinstance(month, int):
+            raise ValueError("le mois doit être un entier / month must be an integer")
+        if not (1 <= month <= 12):
+            raise ValueError("le mois doit être entre 1 et 12 / month must be >= 1 and <= 12")
+        list_days = []
+        for d in range(self.get_days()[month -1]):
+            day = (self.year, month, d+1)
+            list_days.append(day)
+        return list_days
+
+    # Ces fonctions renvoient une liste de datetime(yyyy, mm, dd, h, mn, s, ms) pour les levers et couchers d'un mois donné, heure utc, heure de l'ordinateur local, heure elsewhere (si elswhere=None, renvoie l'heure de l'ordinateur local)
+    # These methods return a list of datetime(yyyy, mm, dd, h, mn, s, ms) for sunrise and sunset of a given month, utc time, local computer time, time elsewhere (if elsewhere=None, return the local computer time)., elsewhere=None):
+    def month_rise_utc(self, month):
+        days = self.month_days(month)
+        table = []
+        for d in days:
+            date_d = datetime(*d)
+            time = self.place.riseutc(date_d)
+            table.append(time)
+        return table
+
+    def month_set_utc(self, month):
+        days = self.month_days(month)
+        table = []
+        for d in days:
+            date_d = datetime(*d)
+            time = self.place.setutc(date_d)
+            table.append(time)
+        return table
+
+    def month_rise_local(self, month):
+        days = self.month_rise_utc(month)
+        table = []
+        for d in days:
+            time = d.replace(tzinfo=pytz.utc).astimezone(local_tz)
+            table.append(time)
+        return table
+    
+    def month_set_local(self, month):
+        days = self.month_set_utc(month)
+        table = []
+        for d in days:
+            time = d.replace(tzinfo=pytz.utc).astimezone(local_tz)
+            table.append(time)
+        return table
+
+    def month_rise_where(self, month, elsewhere=None):
+        days = self.month_rise_utc(month)
+        table = []
+        try:
+            if elsewhere is None:
+                elsewhere = str(local_tz)
+            for d in days:
+                time = d.replace(tzinfo=pytz.utc).astimezone(timezone(elsewhere))
+                table.append(time)
+            return table
+        except:
+            raise ValueError('Vérifiez la timezone / Check the timezone')
+            
+    def month_set_where(self, month, elsewhere=None):
+        days = self.month_set_utc(month)
+        table = []
+        try:
+            if elsewhere is None:
+                elsewhere = str(local_tz)
+            for d in days:
+                time = d.replace(tzinfo=pytz.utc).astimezone(timezone(elsewhere))
+                table.append(time)
+            return table
+        except:
+            raise ValueError('Vérifiez la timezone / Check the timezone')
+            
+    def get_json(self, elsewhere=None):
+        #Renvoie un tableau au format json avec les horaires de lever et coucher pour tous les jours d'une année donnée en un lieu donné
+        #tester sur https://codebeautify.org/json-to-excel-converter    
+        #Returns a table in json format with the times of rising and setting for all the days of a given year in a given place 
+        json = '['
+        for m in range(12):
+            i = 0
+            while i < self.get_days()[m]:
+                rise_utc  = self.month_rise_utc(m+1)[i]
+                set_utc = self.month_set_utc(m+1)[i]
+                rise_local = self.month_rise_local(m+1)[i]
+                set_local = self.month_set_local(m+1)[i]
+                verbose_rise_utc = '"{} h {} mn {} s"'.format(rise_utc.hour, rise_utc.minute, rise_utc.second)
+                verbose_set_utc = '"{} h {} mn {} s"'.format(set_utc.hour, set_utc.minute, set_utc.second)
+                verbose_rise_local = '"{} h {} mn {} s"'.format(rise_local.hour, rise_local.minute, rise_local.second)
+                verbose_set_local = '"{} h {} mn {} s"'.format(set_local.hour, set_local.minute, set_local.second)
+                rise_where = self.month_rise_where(m+1, elsewhere)[i]
+                set_where = self.month_set_where(m+1, elsewhere)[i]
+                verbose_rise_where = '"{} h {} mn {} s"'.format(rise_where.hour, rise_where.minute, rise_where.second)
+                verbose_set_where = '"{} h {} mn {} s"'.format(set_where.hour, set_where.minute, set_where.second)
+                json += '{{"month": {}, "day": {}, "hrise_utc": {}, "mrise_utc": {}, "srise_utc": {}, "hset_utc": {}, "mset_utc": {}, "sset_utc": {}, "vrise_utc": {}, "vset_utc": {},"hrise_local": {}, "mrise_local": {}, "srise_local": {}, "hset_local": {}, "mset_local": {}, "sset_local": {}, "vrise_local": {}, "vset_local": {}, "hrise_where":{}, "mrise_where":{}, "srise_where": {}, "hset_where": {}, "mset_where": {}, "sset_where": {}, "vrise_where": {}, "vset_where": {}}},'.format(rise_utc.month, rise_utc.day, rise_utc.hour, rise_utc.minute, rise_utc.second, set_utc.hour, set_utc.minute, set_utc.second, verbose_rise_utc, verbose_set_utc, rise_local.hour, rise_local.minute, rise_local.second, set_local.hour, set_local.minute, set_local.second, verbose_rise_local, verbose_set_local, rise_where.hour, rise_where.minute, rise_where.second, set_where.hour, set_where.minute, set_where.second, verbose_rise_where, verbose_set_where)
+                i+=1
+        
+        json = json[:-1]
+        json += ']'
+        
+        return json
+
+    def register_json(self, path=None, file_name=None, elsewhere=None):
+        #Copie et enregistre le tableau json dans un fichier
+        #Copy and register json table as a file
+        if path is None:
+            raise ValueError("Entrez un chemin pour le fichier / Give the path for the file")
+        self.place_verbose = self.place_verbose.replace(" ", "_")
+        self.place_verbose = self.place_verbose.replace("'", "-")
+        if file_name is None:
+            file_name = "{}_{}_sun_timetable.json".format(self.year, self.place_verbose)
+        if elsewhere is None:
+            elsewhere = str(local_tz)
+        file = path + file_name
+        json = self.get_json(elsewhere)
+        with open(file, "w") as f:
+            f.write(json)
+        f.close()
+
+    def get_csv(self, elsewhere=None):
+        #Renvoie un tableau au format csv avec les horaires de lever et coucher pour tous les jours d'une année donnée en un lieu donné ; séparateur = virgule
+        #Returns a table in csv format with the times of rising and setting for all the days of a given year in a given place ; separator = coma
+        csv = "month, day, hrise_utc, mrise_utc, srise_utc, hset_utc, mset_utc, sset_utc, vrise_utc, vset_utc, hrise_local, mrise_local, srise_local, hset_local, mset_local, sset_local, vrise_local, vset_local, hrise_where, mrise_where, srise_where, hset_where, mset_where, sset_where, vrise_where, vset_where\n"
+        for m in range(12):
+            i = 0
+            while i < self.get_days()[m]:
+                rise_utc  = self.month_rise_utc(m+1)[i]
+                set_utc = self.month_set_utc(m+1)[i]
+                rise_local = self.month_rise_local(m+1)[i]
+                set_local = self.month_set_local(m+1)[i]
+                verbose_rise_utc = "{} h {} mn {} s".format(rise_utc.hour, rise_utc.minute, rise_utc.second)
+                verbose_set_utc = "{} h {} mn {} s".format(set_utc.hour, set_utc.minute, set_utc.second)
+                verbose_rise_local = "{} h {} mn {} s".format(rise_local.hour, rise_local.minute, rise_local.second)
+                verbose_set_local = "{} h {} mn {} s".format(set_local.hour, set_local.minute, set_local.second)
+                rise_where = self.month_rise_where(m+1, elsewhere)[i]
+                set_where = self.month_set_where(m+1, elsewhere)[i]
+                verbose_rise_where = "{} h {} mn {} s".format(rise_where.hour, rise_where.minute, rise_where.second)
+                verbose_set_where = "{} h {} mn {} s".format(set_where.hour, set_where.minute, set_where.second)
+                csv += "{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}\n".format(rise_utc.month, rise_utc.day, rise_utc.hour, rise_utc.minute, rise_utc.second, set_utc.hour, set_utc.minute, set_utc.second, verbose_rise_utc, verbose_set_utc, rise_local.hour, rise_local.minute, rise_local.second, set_local.hour, set_local.minute, set_local.second, verbose_rise_local, verbose_set_local, rise_where.hour, rise_where.minute, rise_where.second, set_where.hour, set_where.minute, set_where.second, verbose_rise_where, verbose_set_where)
+                i+=1
+        
+        return csv
+
+    def register_csv(self, path=None, file_name=None, elsewhere=None):
+        #Copie et enregistre le tableau json dans un fichier
+        #Copy and register json table as a file
+        if path is None:
+            raise ValueError("Entrez un chemin pour le fichier / Give the path for the file")
+        self.place_verbose = self.place_verbose.replace(" ", "_")
+        self.place_verbose = self.place_verbose.replace("'", "-")
+        if file_name is None:
+            file_name = "{}_{}_sun_timetable.csv".format(self.year, self.place_verbose)
+        if elsewhere is None:
+            elsewhere = str(local_tz)
+        file = path + file_name
+        csv = self.get_csv(elsewhere)
+        with open(file, "w") as f:
+            f.write(csv)
+        f.close()    
