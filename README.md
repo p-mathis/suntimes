@@ -122,17 +122,17 @@ sun_8848.durationverbose(day)
 '10h 58mn 54s'  
 ```
 A difference of more than half an hour for the calculation of the length of the day.
-### Class SunFiles
+## Class SunFiles
 file = SunFiles(place, year, place_verbose=""), where place is a SunTimes instance, year the year you choose and place_verbose the verbose name of the place.  
-## Instanciation
+### Instantiation
 ```python
 from suntimes import SunTimes, SunFiles
 
 place = SunTimes(2.349902, 48.852968, 35)
 file = SunFiles(place, 2020, "Notre-Dame de Paris")
 ```
-## Methods
-### Get the data
+### Methods
+#### Get the data
 ```python
 place = SunTimes(2.349902, 48.852968, 35)
 file = SunFiles(place, 2020, "Notre-Dame de Paris")
@@ -146,7 +146,7 @@ Return data with:
 - day
 - hour, minute and second of sunrise and sunset in utc, local computer time and specific timezone. If elswhere not specified, return utc, local computer time, local computer time again.
 - schedules in a verbose mode (i.e. 8 h 12 mn 7 s)
-### Create and save the file
+#### Create and save the file
 The data is calculated and the file created and saved.
 ```python
 register_json(self, path=None, file_name=None, elswhere=None)
@@ -158,6 +158,6 @@ If file_name is not specified, it is generated automatically. For example : "202
 file.register_json(path="/home/foo/Desktop/", file_name="2020.json")
 file.register_csv(path="/home/foo/Desktop/", elsewhere="America/Sao_Paulo")
 ```
-### Read the file as a workbook
+#### Read the file as a workbook
 - CSV file is easy to open on a Excel xlsx or any other workbook.
 - JSON file can be converted to xlsx [here](https://codebeautify.org/json-to-excel-converter).
