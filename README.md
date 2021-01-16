@@ -3,7 +3,7 @@ Sunrise and sunset time calculation for a location (longitude, latitude, altitud
 ## Project description
 This module contains functions to determine the time of sunset and the time of sunrise for a given day in a given location (longitude, latitude and altitude).  
 Times are calculated using data from [Wikipedia](https://en.wikipedia.org/wiki/Sunrise_equation).  
-The main functions return the times of sunset and sunrise in UTC or in local time. Additional functions return separately the hour, minute and second of sunrise and sunset. A function returns the length of the day. It is possible to obtain the timetables for a place in a different timezone, just by specifying this one.
+The main functions return the times of sunset and sunrise in UTC or in local time. Additional functions return separately the hour, minute and second of sunrise and sunset. A function returns the length of the day. It is possible to obtain the timetables for a place in a different timezone, just by specifying this one.  
 The SunFiles class allows you to create and save a json or csv file with the timetables for a whole year.
 ## Installation
 ### Required modules
@@ -21,11 +21,11 @@ $ pip install jdcal
 The module can be installed using pip
 ```sh
 $ pip install suntimes
-```
-## Usage
-### Class SunTimes
 ```python
-place = SunTimes(longitude, latitude, altitude=0)
+# Mount Everest, altitude = default (zero)
+sun_0 = SunTimes(86.9246, 27.9891)
+# Mount Everest, altitude = 8848
+sun_8848 = SunTimes(86.9246, 27.9891, 88e, altitude=0)
  ```
 A place is characterized by longitude, latitude, altitude
 - longitude: float between -180 and 180; negative for west longitudes, positive for east longitudes
