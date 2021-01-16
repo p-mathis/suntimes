@@ -327,7 +327,6 @@ class SunFiles():
             
     def get_json(self, elsewhere=None):
         #Renvoie un tableau au format json avec les horaires de lever et coucher pour tous les jours d'une année donnée en un lieu donné
-        #tester sur https://codebeautify.org/json-to-excel-converter    
         #Returns a table in json format with the times of rising and setting for all the days of a given year in a given place 
         json = '['
         for m in range(12):
