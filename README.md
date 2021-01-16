@@ -152,7 +152,7 @@ The data is calculated and the file created and saved.
 register_json(self, path=None, file_name=None, elswhere=None)
 register_csv(self, path=None, file_name=None, elswhere=None)
 ```
-The path must be indicated correctly, otherwise an error is raised : "/home/foo/Desktop/" or "C:\Documents\Foo\Exercices\" for exemple.
+The path must be indicated correctly, otherwise an error is raised : "/home/foo/Desktop/" or "C:\Documents\Foo\Exercices\\" for exemple.
 If file_name is not specified, it is generated automatically. For example : "2020_Notre-Dame_de_Paris_sun_timetable.csv"
 ```python
 file.register_json(path="/home/foo/Desktop/", file_name="2020.json")
