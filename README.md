@@ -27,7 +27,6 @@ $ pip install suntimes
 ```python
 place = SunTimes(longitude, latitude, altitude=0)
  ```
-python
 A place is characterized by longitude, latitude, altitude
 - longitude: float between -180 and 180; negative for west longitudes, positive for east longitudes
 - latitude: float between -66.56 and +66.56; the calculation is only valid between the two polar circles. Positive if north, negative if south
@@ -124,7 +123,7 @@ sun_8848.durationverbose(day)
 ```
 A difference of more than half an hour for the calculation of the length of the day.
 ### Class SunFiles
-file = SunFiles(place, year, place_verbose="), where place is a SunTimes instance, year the year you choose and place_verbose the verbose name of the place.  
+file = SunFiles(place, year, place_verbose=""), where place is a SunTimes instance, year the year you choose and place_verbose the verbose name of the place.  
 ## Instanciation
 ```python
 from suntimes import SunTimes, SunFiles
@@ -147,15 +146,18 @@ Return data with:
 - day
 - hour, minute and second of sunrise and sunset in utc, local computer time and specific timezone. If elswhere not specified, return utc, local computer time, local computer time again.
 - schedules in a verbose mode (i.e. 8 h 12 mn 7 s)
-### Create and register the file
-The data is calculated and the file created and registered.
+### Create and save the file
+The data is calculated and the file created and saved.
 ```python
 register_json(self, path=None, file_name=None, elswhere=None)
 register_csv(self, path=None, file_name=None, elswhere=None)
 ```
 The path must be indicated correctly, otherwise an error is raised : "/home/toto/Desktop/" or "C:\Mes Documents\Perso\Exercices\ for exemple.
-If file_name is not specified, it is generated automatically. For example : "2020_Notre-Dame_de_Paris_sun_timetable.json"
+If file_name is not specified, it is generated automatically. For example : "2020_Notre-Dame_de_Paris_sun_timetable.csv"
 ```python
 file.register_json(path="/home/toto/Desktop/", file_name="2020.json")
 file.register_csv(path="/home/toto/Desktop/", elsewhere="America/Sao_Paulo")
 ```
+### Read the file as a workbook
+- CSV file is easy to open on a Excel xlsx or any other workbook.
+- JSON file can be converted to xlsx [here](https://codebeautify.org/json-to-excel-converter).
