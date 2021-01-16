@@ -21,12 +21,12 @@ $ pip install jdcal
 The module can be installed using pip
 ```sh
 $ pip install suntimes
-```python
-# Mount Everest, altitude = default (zero)
-sun_0 = SunTimes(86.9246, 27.9891)
-# Mount Everest, altitude = 8848
-sun_8848 = SunTimes(86.9246, 27.9891, 88e, altitude=0)
  ```
+## Usage
+### Class SunTimes
+```python
+place = SunTimes(longitude, latitude, altitude=0)
+```
 A place is characterized by longitude, latitude, altitude
 - longitude: float between -180 and 180; negative for west longitudes, positive for east longitudes
 - latitude: float between -66.56 and +66.56; the calculation is only valid between the two polar circles. Positive if north, negative if south
