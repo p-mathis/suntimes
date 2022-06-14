@@ -163,9 +163,7 @@ class SunTimes():
         self.latitude   = latitude
         self.altitude = altitude
 
-    def mean_solar_noon(self, date):
-
-        
+    def mean_solar_noon(self, date):        
         Jdate = gcal2jd(date.year, date.month, date.day)
         Jdate = Jdate[0] + Jdate[1] + 0.5
         n = Jdate - JULIAN_DAYS_2000 + JULIAN_DAYS_LEAP
@@ -351,7 +349,6 @@ class SunTimes():
             return else_time
         else:
             return utc_time
-
 
 class SunFiles():
     def __init__(self, place, year, place_verbose=""):
