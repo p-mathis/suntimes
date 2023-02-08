@@ -503,10 +503,10 @@ class SunFiles():
             verbose_rise_where = f'{coma}{rise_W[i]}{coma}' if isinstance(rise_W[i], str) else f'{coma}{hrise_where} h {mrise_where} mn{coma}'
             verbose_set_where = f'{coma}{set_W[i]}{coma}' if isinstance(set_W[i], str) else f'{coma}{hset_where} h {mset_where} mn{coma}'
 
-            if hrise_utc == '"PN"' or hset_utc == '"PN':
-                duration = "not calculable - Polar Night"
+            if hrise_utc == '"PN"' or hset_utc == '"PN"':
+                duration = '"not calculable - Polar Night"'
             elif hrise_utc == '"PD"' or hset_utc == '"PD"':
-                duration = "not calculable - Polar Day"
+                duration = '"not calculable - Polar Day"'
             else:
                 duration = f'{coma}{fraction_day_to_hms((set_U[i] - rise_U[i]).seconds/86400)[0]} h {fraction_day_to_hms((set_U[i] - rise_U[i]).seconds/86400)[1]} mn{coma}'
 
@@ -579,10 +579,10 @@ class SunFiles():
             verbose_rise_where = f'{coma}{rise_W[i]}{coma}' if isinstance(rise_W[i], str) else f'{coma}{hrise_where} h {mrise_where} mn{coma}'
             verbose_set_where = f'{coma}{set_W[i]}{coma}' if isinstance(set_W[i], str) else f'{coma}{hset_where} h {mset_where} mn{coma}'
 
-            if hrise_utc == '"PN"' or hset_utc == '"PN':
-                duration = "not calculable - Polar Night"
+            if hrise_utc == '"PN"' or hset_utc == '"PN"':
+                duration = '"not calculable - Polar Night"'
             elif hrise_utc == '"PD"' or hset_utc == '"PD"':
-                duration = "not calculable - Polar Day"
+                duration = '"not calculable - Polar Day"'
             else:
                 duration = f'{coma}{fraction_day_to_hms((set_U[i] - rise_U[i]).seconds/86400)[0]} h {fraction_day_to_hms((set_U[i] - rise_U[i]).seconds/86400)[1]} mn{coma}'
 
